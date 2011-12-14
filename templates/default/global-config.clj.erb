@@ -1,8 +1,8 @@
 ;; This configuration is stored globally on HDFS
 
-{ :replication 2
+{ :replication <%= @replication %>
   :hosts [<% @cluster_nodes.each do |edb_node| %>"<%= edb_node %>" <% end %>]
-  :port 3578
+  :port <%= node['elephantdb']['port'] %>
   :domains {
     <% @domains.each do |domain| %>
       "<%= domain['id'] %>" "<%= @node['elephantdb']['dfs_path'] %>/<%= domain['id'] %>"
