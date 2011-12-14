@@ -1,0 +1,5 @@
+#!/bin/sh
+# Deploy time: <%= node['ohai_time'] %>
+exec 2>&1
+cd <%= @node['elephantdb']['src_dir'] %>
+exec chpst -u <%= @node['elephantdb']['user'] %> lein run <%= @node['elephantdb']['conf_dir'] %>/global-config.clj <%= @node['elephantdb']['conf_dir'] %>/local-config.clj

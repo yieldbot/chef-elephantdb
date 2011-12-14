@@ -1,0 +1,12 @@
+;; This configuration is stored on a per machine basis
+
+{ :local-dir "<%= @node['elephantdb']['data_dir'] %>"
+  :max-online-download-rate-kb-s 1024
+  :update-interval-s 60  ;; check for domain updates every minute
+  :local-db-conf {"elephantdb.persistence.JavaBerkDB" {}
+                  "elephantdb.persistence.TokyoCabinet" {}
+                  }
+  :hdfs-conf {"fs.default.name" "<%= @node['elephantdb']['dfs_path'] %>"
+              "fs.s3n.awsAccessKeyId" "<%= @node['aws']['access_key'] %>"
+              "fs.s3n.awsSecretAccessKey" "<%= @node['aws']['secret_access_key'] %>"}
+}

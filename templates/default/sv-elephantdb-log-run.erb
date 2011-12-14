@@ -1,0 +1,2 @@
+#!/bin/sh
+exec chpst -u <%= @node['elephantdb']['user'] %> svlogd <%= @node['elephantdb']['log_dir'] %>
