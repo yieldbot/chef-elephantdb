@@ -1,8 +1,88 @@
 = DESCRIPTION:
 
+Installs elephantdb server (https://github.com/nathanmarz/elephantdb)
+
 = REQUIREMENTS:
+
+== Cookbooks:
+
+Opscode Cookbooks (http://github.com/opscode/cookbooks/tree/master)
+
+* ntp
+* runit
+* git
+* java
+
+Leiningen Cookbook (http://community.opscode.com/cookbooks/leiningen)
+
+* leiningen
 
 = ATTRIBUTES:
 
+User and group to own elephantdb files and 
+
+* node['elephantdb']['user'] = 'nobody'
+* node['elephantdb']['group'] = 'nogroup'
+
+DFS path server pulls domains from
+
+* node['elephantdb']['dfs_path'] = 's3n://elephantdb.yieldbot.com/v1'
+
+Config, log, data, install directories
+
+* node['elephantdb']['conf_dir'] = '/etc/elephantdb'
+* node['elephantdb']['data_dir'] = '/mnt/elephantdb'
+* node['elephantdb']['log_dir'] = '/var/log/elephantdb'
+* node['elephantdb']['src_dir'] = '/usr/local/elephantdb'
+
+Git repo to pull elephantdb source from
+
+* node['elephantdb']['src_repo'] = 'git://github.com/nathanmarz/elephantdb.git'
+
+Server port and other config settings
+
+* node['elephantdb']['port'] = 3578
+* node['elephantdb']['max_online_download_rate'] = 1024
+* node['elephantdb']['update_interval'] = 60
+
+
+
+= DATABAGS:
+
+The list of domains to pull from must be defined in a database named 'elephantdb_domains'.  This
+data bag should contain a set of items with an id: <domain_name>.  Each domain item in the
+data bag, will be added to the global-config.clj configuration file.
+
+= ROLES:
+
+It is recommended to create a simple chef role that includes the elephantdb default recipe.  This
+role may also used to set override attributes for elephantdb that makes sense for your environment.
+Here is an example of such a simple role definition (Note: This example shows how to override the
+Java install flavor to use Sun JDK vs. the default for the java cookbook which is Open JDK):
+
+name        'elephantdb'
+description 'applies to all nodes in the elephantdb cluster'
+
+run_list *%w[
+  ntp
+  git
+  leiningen
+  elephantdb
+  ]
+
+default_attributes({
+    # Use sun java
+    :java => {
+      :install_flavor => 'sun'
+    }
+  })
+
 = USAGE:
 
+Simply install the default 'elephantdb' recipe wherever you would like the server to be installed.  This
+can be done by using the example role above and specifying that role in the node's run list.
+
+= LICENSE & AUTHOR:
+
+Author:: Dave White (<dwhite@yieldbot.com>)
+Copywrite & License: TBD...

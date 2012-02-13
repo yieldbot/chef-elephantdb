@@ -28,6 +28,7 @@ end
 
 script 'elephantdb deps' do
   interpreter 'bash'
+  user node['elephantdb']['user']
   code <<-eof
     cd #{node['elephantdb']['src_dir']} && lein deps
   eof
@@ -42,7 +43,7 @@ if cluster_nodes.length < 2
   replication = 1
 end
 
-edb_domains = search(:elephantdb_domains, "*:*")
+edb_domains = node['elephantdb']['domains']
 
 %w{local global}.each do |cfg|
   template "#{node['elephantdb']['conf_dir']}/#{cfg}-config.clj" do
