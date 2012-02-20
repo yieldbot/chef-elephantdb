@@ -43,14 +43,12 @@ if cluster_nodes.length < 2
   replication = 1
 end
 
-edb_domains = node['elephantdb']['domains']
-
 %w{local global}.each do |cfg|
   template "#{node['elephantdb']['conf_dir']}/#{cfg}-config.clj" do
     owner node['elephantdb']['user']
     group node['elephantdb']['group']
     mode 0755
-    variables(:cluster_nodes => cluster_nodes, :domains => edb_domains, :replication => replication)
+    variables(:cluster_nodes => cluster_nodes, :replication => replication)
     source "#{cfg}-config.clj.erb"
   end
 end

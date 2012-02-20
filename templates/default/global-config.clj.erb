@@ -4,8 +4,8 @@
   :hosts [<% @cluster_nodes.each do |edb_node| %>"<%= edb_node %>" <% end %>]
   :port <%= node['elephantdb']['port'] %>
   :domains {
-    <% @domains.each do |domain| %>
-      "<%= domain['id'] %>" "<%= @node['elephantdb']['dfs_path'] %>/<%= domain['id'] %>"
+    <% @node['elephantdb']['domains'].each do |domain| %>
+      "<%= domain %>" "<%= @node['elephantdb']['dfs_path'] %>/<%= domain %>"
     <% end %>
   }
 }
