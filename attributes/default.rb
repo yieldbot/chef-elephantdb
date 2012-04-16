@@ -1,3 +1,4 @@
+default['elephantdb']['version'] = '0.2.0-wip2'
 default['elephantdb']['user'] = 'ubuntu'
 default['elephantdb']['group'] = 'ubuntu'
 default['elephantdb']['conf_dir'] = '/etc/elephantdb'
