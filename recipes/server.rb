@@ -10,20 +10,20 @@ include_recipe "elephantdb::default"
    end
 end
 
-script 'elephantdb uberjar' do
+script 'build elephantdb' do
   interpreter 'bash'
   user node['elephantdb']['user']
   cwd node['elephantdb']['src_dir']
   code <<-eof
-    UBERJAR=elephantdb-#{node['elephantdb']['version']}-standalone.jar
-    if [ -f ${UBERJAR} ]; then
-         modified_files=$(find src project.clj -newer ${UBERJAR})
+    EDBJAR=elephantdb-#{node['elephantdb']['version']}.jar
+    if [ -f ${EDBJAR} ]; then
+         modified_files=$(find src project.clj -newer ${EDBJAR})
          if [ ${#modified_files} -eq 0 ]; then
              echo "Skipping uberjar because no files modified"
              exit 0
          fi
     fi
-    lein uberjar
+    lein clean, deps, compile, jar
   eof
 end
 
@@ -51,7 +51,7 @@ conf_variables = {
   :replication => replication, 
   :hdfsConfFsDefaultName => hdfsConfFsDefaultName,
   :blobConfFsDefaultName => blobConfFsDefaultName,
-  :elephantdb_uberjar => "elephantdb-#{node['elephantdb']['version']}-standalone.jar"
+  :elephantdb_jar => "elephantdb-#{node['elephantdb']['version']}.jar"
 }
 
 %w{local global}.each do |cfg|

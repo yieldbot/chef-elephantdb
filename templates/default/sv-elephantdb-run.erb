@@ -2,4 +2,5 @@
 # Deploy time: <%= node['ohai_time'] %>
 exec 2>&1
 cd <%= @node['elephantdb']['src_dir'] %>
-exec chpst -u <%= @node['elephantdb']['user'] %> java -jar <%= @options[:elephantdb_uberjar] %> <% if @options[:blobConfFsDefaultName].start_with?("s3") %><%= @options[:blobConfFsDefaultName] %><% else %><%= @node['elephantdb']['conf_dir'] %><% end %>/global-config.clj <%= @node['elephantdb']['conf_dir'] %>/local-config.clj
+cp=`LEIN_ROOT=1 lein classpath`:<%= @node['elephantdb']['src_dir'] %>/<%= @options[:elephantdb_jar] %>
+exec chpst -u <%= @node['elephantdb']['user'] %> java <%= @node['elephantdb']['java_opts'] %> -cp $cp elephantdb.keyval.core <% if @options[:blobConfFsDefaultName].start_with?("s3") %><%= @options[:blobConfFsDefaultName] %><% else %><%= @node['elephantdb']['conf_dir'] %><% end %>/global-config.clj <%= @node['elephantdb']['conf_dir'] %>/local-config.clj
