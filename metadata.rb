@@ -10,6 +10,6 @@ recipe           "elephantdb", "Installs elephantdb server"
   supports os
 end
 
-%w{ ntp git leiningen runit cluster_service_discovery }.each do |cb|
+%w{ ntp git leiningen runit cluster_service_discovery snappy }.each do |cb|
   depends cb
 end

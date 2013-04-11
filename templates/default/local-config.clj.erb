@@ -3,6 +3,7 @@
 { :local-root "<%= @node['elephantdb']['data_dir'] %>"
   :download-rate-limit <%= @node['elephantdb']['download_rate_limit'] %>
   :update-interval-s <%= @node['elephantdb']['update_interval']%>
+  :metrics-reporting-interval-s <%= @node['elephantdb']['metrics_interval']%>
   :hdfs-conf {"fs.default.name" "<%= @hdfsConfFsDefaultName %>"
 <% if @hdfsConfFsDefaultName.start_with?("s3") %>
               "fs.s3n.awsAccessKeyId" "<%= @node['aws']['access_key'] %>"

@@ -10,21 +10,23 @@ include_recipe "elephantdb::default"
    end
 end
 
-script 'build elephantdb' do
-  interpreter 'bash'
-  user node['elephantdb']['user']
-  cwd node['elephantdb']['src_dir']
-  code <<-eof
-    EDBJAR=elephantdb-#{node['elephantdb']['version']}.jar
-    if [ -f ${EDBJAR} ]; then
-         modified_files=$(find src project.clj -newer ${EDBJAR})
-         if [ ${#modified_files} -eq 0 ]; then
-             echo "Skipping uberjar because no files modified"
-             exit 0
-         fi
-    fi
-    lein clean, deps, compile, jar
-  eof
+
+edb_jar = "#{node['elephantdb']['src_dir']}/elephantdb-server-#{node['elephantdb']['version']}-standalone.jar"
+remote_file "#{edb_jar}" do
+  source "#{node['elephantdb']['standalone_jar']}"
+  owner node['elephantdb']['user']
+  group node['elephantdb']['group']
+  action :nothing
+end
+
+http_request "HEAD #{node['elephantdb']['standalone_jar']}" do
+  message ""
+  url "#{node['elephantdb']['standalone_jar']}"
+  action :head
+  if File.exists?("#{edb_jar}")
+    headers "If-Modified-Since" => File.mtime("#{edb_jar}").httpdate
+  end
+  notifies :create, resources(:remote_file => "#{edb_jar}"), :immediately
 end
 
 cluster_nodes = []
@@ -35,23 +37,21 @@ replication = 2
 if cluster_nodes.length < 2
   replication = 1
 end
+if is_test_cluster
+  replication = 1
+end
 
 hdfsConfFsDefaultName = node['elephantdb']['hdfs_conf']['fs.default.name']
-if hdfsConfFsDefaultName.start_with?("s3") and node['aws']['s3_suffix'] != ''
-  hdfsConfFsDefaultName = "#{hdfsConfFsDefaultName}.#{node['aws']['s3_suffix']}"
-end
 
 blobConfFsDefaultName = node['elephantdb']['blob_conf']['fs.default.name']
-if blobConfFsDefaultName.start_with?("s3") and node['aws']['s3_suffix'] != ''
-  blobConfFsDefaultName = "#{blobConfFsDefaultName}.#{node['aws']['s3_suffix']}"
-end
 
 conf_variables = {
   :cluster_nodes => cluster_nodes, 
   :replication => replication, 
   :hdfsConfFsDefaultName => hdfsConfFsDefaultName,
   :blobConfFsDefaultName => blobConfFsDefaultName,
-  :elephantdb_jar => "elephantdb-#{node['elephantdb']['version']}.jar"
+  :elephantdb_jar => "#{edb_jar}",
+  :domain_prefix => node['elephantdb']['domain_prefix'],
 }
 
 %w{local global}.each do |cfg|
