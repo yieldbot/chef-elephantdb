@@ -29,10 +29,7 @@ http_request "HEAD #{node['elephantdb']['standalone_jar']}" do
   notifies :create, resources(:remote_file => "#{edb_jar}"), :immediately
 end
 
-cluster_nodes = []
-search(:node, "cluster_name:#{node['cluster_name']} AND cluster_role:#{node['cluster_role']}") do |edb_node|
-  cluster_nodes << edb_node['ipaddress']
-end
+cluster_nodes = discover_all(:elephantdb, :server)
 replication = 2
 if cluster_nodes.length < 2
   replication = 1
@@ -67,4 +64,4 @@ end
 runit_service "elephantdb" do
   options conf_variables
 end
-provide_service ("#{node[:cluster_name]}-elephantdb")
+announce(:elephantdb, :server)
