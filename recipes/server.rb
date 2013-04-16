@@ -34,9 +34,6 @@ replication = 2
 if cluster_nodes.length < 2
   replication = 1
 end
-if is_test_cluster
-  replication = 1
-end
 
 hdfsConfFsDefaultName = node['elephantdb']['hdfs_conf']['fs.default.name']
 
