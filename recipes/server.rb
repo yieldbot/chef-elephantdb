@@ -46,7 +46,7 @@ conf_variables = {
   :blobConfFsDefaultName => blobConfFsDefaultName,
   :elephantdb_jar => "#{edb_jar}",
   :domain_prefix => node['elephantdb']['domain_prefix'],
-  :graphite_server => graphite_host,
+  :graphite_host => graphite_host,
 }
 
 %w{local global}.each do |cfg|
