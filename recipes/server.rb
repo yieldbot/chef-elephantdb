@@ -31,7 +31,8 @@ http_request "HEAD #{remote_jar}" do
   notifies :create, resources(:remote_file => edb_jar), :immediately
 end
 
-cluster_nodes = discover_all(:elephantdb, :server)
+cluster_nodes = discover_all(:elephantdb, :server).map(&:private_ip)
+cluster_nodes << node[:ipaddress]
 replication = 2
 if cluster_nodes.length < 2
   replication = 1
