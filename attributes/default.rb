@@ -13,6 +13,7 @@ default['elephantdb']['update_interval'] = 60
 default['elephantdb']['metrics_interval'] = 600
 default['elephantdb']['domain_prefix'] = ''
 default['elephantdb']['java_opts'] = '-server -Djava.net.preferIPv4Stack=true -XX:+UseCompressedOops -Xmx4096 -Xms2048m'
+default['elephantdb']['graphite']['cluster_name'] = nil
 default['leveldb']['release_url'] = 'http://leveldb.googlecode.com/files/leveldb-1.7.0.tar.gz'
 default['leveldb']['version'] = '1.7.0'
 
