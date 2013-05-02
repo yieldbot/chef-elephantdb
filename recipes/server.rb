@@ -37,7 +37,7 @@ end
 
 hdfsConfFsDefaultName = node['elephantdb']['hdfs_conf']['fs.default.name']
 blobConfFsDefaultName = node['elephantdb']['blob_conf']['fs.default.name']
-graphite_host = discover(:graphite, :server).private_ip rescue nil
+graphite_host = discover(:graphite, :carbon).private_ip rescue nil
 
 conf_variables = {
   :cluster_nodes => cluster_nodes, 
