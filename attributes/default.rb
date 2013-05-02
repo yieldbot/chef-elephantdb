@@ -1,4 +1,3 @@
-default['elephantdb']['version'] = '0.4.4-SNAPSHOT'
 default['elephantdb']['user'] = 'ubuntu'
 default['elephantdb']['group'] = 'ubuntu'
 default['elephantdb']['conf_dir'] = '/etc/elephantdb'

@@ -10,23 +10,25 @@ include_recipe "elephantdb::default"
    end
 end
 
+remote_jar = node['elephantdb']['standalone_jar']
+jar_basename = File::basename(remote_jar)
+edb_jar = "#{node['elephantdb']['src_dir']}/elephantdb-server/#{jar_basename}"
 
-edb_jar = "#{node['elephantdb']['src_dir']}/elephantdb-server/elephantdb-server-#{node['elephantdb']['version']}-standalone.jar"
-remote_file "#{edb_jar}" do
-  source "#{node['elephantdb']['standalone_jar']}"
+remote_file edb_jar do
+  source remote_jar
   owner node['elephantdb']['user']
   group node['elephantdb']['group']
   action :nothing
 end
 
-http_request "HEAD #{node['elephantdb']['standalone_jar']}" do
+http_request "HEAD #{remote_jar}" do
   message ""
-  url "#{node['elephantdb']['standalone_jar']}"
+  url remote_jar
   action :head
-  if File.exists?("#{edb_jar}")
-    headers "If-Modified-Since" => File.mtime("#{edb_jar}").httpdate
+  if File.exists?(edb_jar)
+    headers "If-Modified-Since" => File.mtime(edb_jar).httpdate
   end
-  notifies :create, resources(:remote_file => "#{edb_jar}"), :immediately
+  notifies :create, resources(:remote_file => edb_jar), :immediately
 end
 
 cluster_nodes = discover_all(:elephantdb, :server)
