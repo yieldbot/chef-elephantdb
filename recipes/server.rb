@@ -11,7 +11,7 @@ include_recipe "elephantdb::default"
 end
 
 
-edb_jar = "#{node['elephantdb']['src_dir']}/elephantdb-server-#{node['elephantdb']['version']}-standalone.jar"
+edb_jar = "#{node['elephantdb']['src_dir']}/elephantdb-server/elephantdb-server-#{node['elephantdb']['version']}-standalone.jar"
 remote_file "#{edb_jar}" do
   source "#{node['elephantdb']['standalone_jar']}"
   owner node['elephantdb']['user']
@@ -36,8 +36,8 @@ if cluster_nodes.length < 2
 end
 
 hdfsConfFsDefaultName = node['elephantdb']['hdfs_conf']['fs.default.name']
-
 blobConfFsDefaultName = node['elephantdb']['blob_conf']['fs.default.name']
+graphite_host = discover(:graphite, :server).private_ip rescue nil
 
 conf_variables = {
   :cluster_nodes => cluster_nodes, 
@@ -46,6 +46,7 @@ conf_variables = {
   :blobConfFsDefaultName => blobConfFsDefaultName,
   :elephantdb_jar => "#{edb_jar}",
   :domain_prefix => node['elephantdb']['domain_prefix'],
+  :graphite_server => graphite_host,
 }
 
 %w{local global}.each do |cfg|

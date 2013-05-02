@@ -1,6 +1,6 @@
 #!/bin/sh
 # Deploy time: <%= node['ohai_time'] %>
 exec 2>&1
-cd <%= @node['elephantdb']['src_dir'] %>
+cd <%= @node['elephantdb']['src_dir'] %>/elephantdb-server
 ulimit -n 102400
 exec chpst -u <%= @node['elephantdb']['user'] %> java <%= @node['elephantdb']['java_opts'] %> -jar <%= @options[:elephantdb_jar] %> <% if @options[:blobConfFsDefaultName].start_with?("s3") %><%= @options[:blobConfFsDefaultName] %><% else %><%= @node['elephantdb']['conf_dir'] %><% end %>/global-config.clj <%= @node['elephantdb']['conf_dir'] %>/local-config.clj
