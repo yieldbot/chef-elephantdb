@@ -1,7 +1,7 @@
 ;; This configuration is stored on a per machine basis
 
 { :local-root "<%= @node['elephantdb']['data_dir'] %>"
-  :ui-port "<%= @node['elephantdb']['ui_port'] %>"
+  :ui-port <%= @node['elephantdb']['ui_port'] %>
   :download-rate-limit <%= @node['elephantdb']['download_rate_limit'] %>
   :update-interval-s <%= @node['elephantdb']['update_interval']%>
   :graphite-reporter {:host "<%= @graphite_host %>" :port 2003}
