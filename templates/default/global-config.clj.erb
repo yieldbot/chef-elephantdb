@@ -1,4 +1,4 @@
-{ :replication <%= @replication %>
+{ :replication <%= @node['elephantdb']['replication'] %>
   :hosts [<% @cluster_nodes.each do |edb_node| %>"<%= edb_node %>" <% end %>]
   :port <%= node['elephantdb']['port'] %>
   :domains {

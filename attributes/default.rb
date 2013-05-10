@@ -8,6 +8,7 @@ default['elephantdb']['src_repo'] = 'git://github.com/nathanmarz/elephantdb.git'
 default['elephantdb']['src_branch'] = 'master'
 default['elephantdb']['port'] = 3578
 default['elephantdb']['ui_port'] = 3000
+default['elephantdb']['replication'] = 2
 default['elephantdb']['download_rate_limit'] = 0
 default['elephantdb']['update_interval'] = 60
 default['elephantdb']['metrics_interval'] = 600

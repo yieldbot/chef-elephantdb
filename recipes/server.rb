@@ -34,10 +34,6 @@ end
 cluster_nodes = discover_all(:elephantdb, :server).map(&:private_ip)
 cluster_nodes << node[:ipaddress]
 cluster_nodes = cluster_nodes.sort
-replication = 2
-if cluster_nodes.length < 2
-  replication = 1
-end
 
 hdfsConfFsDefaultName = node['elephantdb']['hdfs_conf']['fs.default.name']
 blobConfFsDefaultName = node['elephantdb']['blob_conf']['fs.default.name']
@@ -45,7 +41,6 @@ graphite_host = discover(:graphite, :carbon, node['elephantdb']['graphite']['clu
 
 conf_variables = {
   :cluster_nodes => cluster_nodes, 
-  :replication => replication, 
   :hdfsConfFsDefaultName => hdfsConfFsDefaultName,
   :blobConfFsDefaultName => blobConfFsDefaultName,
   :elephantdb_jar => "#{edb_jar}",
